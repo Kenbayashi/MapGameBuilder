@@ -113,6 +113,11 @@ public class BuilderController implements SelectorDelegate, Initializable {
 
         copyDir("resourses/", "games/" + title + "/");
 
+        System.out.println("\n\n" + "Use following commands to play new MapGame!!" + "\n");
+        System.out.println("cd games/" + title + "/");
+        System.out.println("javac *.java");
+        System.out.println("java MapGame" + "\n");
+
         System.exit(0);
     }
 
