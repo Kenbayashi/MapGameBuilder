@@ -24,7 +24,9 @@ public class BuilderController implements SelectorDelegate, Initializable {
     @FXML public ImageView charaView;
 
     Selector blockSelector = new Selector("./blocks/");
-    //Selector charaSelector = new Selector("./charas/");
+    //Selector charaSelector = new Selector("./chara/");
+
+    AnimationItem item;
 
     //イニシャライザ
     @Override
@@ -33,6 +35,9 @@ public class BuilderController implements SelectorDelegate, Initializable {
         //charaSelector.setDelegate(this);
 
         titleField.setPromptText("入力してください");
+
+        Image[] images = getImages("./chara/");
+        item = new AnimationItem(charaView, images, true);
     }
 
     //画像をセット
@@ -113,11 +118,13 @@ public class BuilderController implements SelectorDelegate, Initializable {
 
         copyDir("resourses/", "games/" + title + "/");
 
+        //メッセージ
         System.out.println("\n\n" + "Use following commands to play new MapGame!!" + "\n");
         System.out.println("cd games/" + title + "/");
         System.out.println("javac *.java");
         System.out.println("java MapGame" + "\n");
 
+        //アプリケーションを終了
         System.exit(0);
     }
 
@@ -161,9 +168,6 @@ public class BuilderController implements SelectorDelegate, Initializable {
                 String pathIn  = dirIn  + files[i].getName();
                 String pathOut = dirOut + files[i].getName();
                 System.out.println(pathIn + " をコピー");
-
-                //final File newFile = new File(pathOut);
-                //newFile.createNewFile();
 
                 Path sourcePath = Paths.get(pathIn);
                 Path targetPath = Paths.get(pathOut);
