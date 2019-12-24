@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="42.0" prefWidth="106.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Selector">
+   <children>
+      <Button mnemonicParsing="false" onAction="#prevButtonAction" prefHeight="32.0" prefWidth="32.0" text="←">
+         <HBox.margin>
+            <Insets top="5.0" />
+         </HBox.margin>
+      </Button>
+      <ImageView fx:id="view" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+         <HBox.margin>
+            <Insets left="5.0" right="5.0" top="5.0" />
+         </HBox.margin>
+      </ImageView>
+      <Button mnemonicParsing="false" onAction="#nextButtonAction" prefHeight="32.0" prefWidth="32.0" text="→">
+         <HBox.margin>
+            <Insets top="5.0" />
+         </HBox.margin>
+      </Button>
+   </children>
+</HBox>
