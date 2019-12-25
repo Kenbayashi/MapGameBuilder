@@ -40,23 +40,34 @@ public class BuilderController implements SelectorDelegate, Initializable {
         item = new AnimationItem(charaView, images, true);
     }
 
-    //画像をセット
+    //アイテムをセット
     @Override
     public void setData(Selector selector) {
-        selector.images = getImages(selector.dir);
+        if (selector == blockSelector) {
+            selector.items = toAnimamtionItems(blockView, selector.dir);
+            selector.currentItem().start();
+        } 
+        /*  selectorを追加したら解除
+        if (selector == itemSelector) {
+            selector.items = toAnimationItems(itemView, selector.dir);
+            selector.currentItem().start();
+        }
 
-        blockView.setImage(blockSelector.currentImage());
-        //charaView.setImage(charaSelector.currentImage());
+        if (selector == charaSelector) {
+            selector.items = toAnimationItems(charaView, selector.dir);
+            selector.currentItem().start();
+        }
+        */
     }
 
     //右ボタン
     public void blockNextAction(ActionEvent event) {
-        blockView.setImage(blockSelector.nextImage());
+        blockSelector.nextItem();
     }
 
     //左ボタン
     public void blockPrevAction(ActionEvent event) {
-        blockView.setImage(blockSelector.prevImage());
+        blockSelector.prevItem();
     }
 
     //右ボタン
@@ -88,10 +99,11 @@ public class BuilderController implements SelectorDelegate, Initializable {
             System.out.println("タイトル: " + title);
         }
 
-        //ここからファイル操作
+        //ディレクトリを作成
         final File gamesDir = new File("games");
         final File titleDir = new File("games/" + title);
         final File pngDir   = new File("games/" + title + "/png");
+        final File wallDir  = new File("games/" + title + "/png/wall");
 
         if (!gamesDir.exists()) {
             gamesDir.mkdir();
@@ -106,15 +118,17 @@ public class BuilderController implements SelectorDelegate, Initializable {
                 titleDir.mkdir();
                 System.out.println("games/" + title + "/png を作成");
                 pngDir.mkdir();
+                System.out.println("games/" + title + "/png/wall を作成");
+                wallDir.mkdir();
             } catch (Exception e) {
                 System.err.println(e);
             }
         }
 
         //もろもろのコピー
-        Image  blockImg  = blockSelector.currentImage();
-        String blockPath = "games/" + title + "/png/WALL.png";
-        copyImage(blockImg, blockPath);
+        Image[]  blockImages = blockSelector.currentItem().getImages();
+        String blockPath = "games/" + title + "/png/wall/";
+        copyImages(blockImages, blockPath);
 
         copyDir("resourses/", "games/" + title + "/");
 
@@ -147,17 +161,37 @@ public class BuilderController implements SelectorDelegate, Initializable {
         }
     }
 
-    //指定された画像ファイルをコピー
-    private void copyImage(Image img, String target) {
-        final File imgFile = new File(target);
+    //ディレクトリからAnimationItem[]を作成
+    private AnimationItem[] toAnimamtionItems(ImageView imageView, String dir) {
         try {
-            imgFile.createNewFile();
-            ImageIO.write(SwingFXUtils.fromFXImage(img, null), "png", imgFile);
-            System.out.println("画像ファイルをコピー");
-        } catch (IOException e) {
+            File[] files = new File(dir).listFiles();
+            AnimationItem[] items = new AnimationItem[files.length];
+
+            for (int i = 0; i < files.length; i++) {
+                Image[] images = getImages(dir + files[i].getName());
+                items[i] = new AnimationItem(imageView, images, false);
+            }
+
+            return items;
+        } catch (Exception e) {
             System.err.println(e);
+            return null;
         }
-  }
+    }
+
+    //指定された画像ファイルをコピー
+    private void copyImages(Image[] images, String target) {
+        for (int i = 0; i < images.length; i++) {
+            final File imgFile = new File(target + i + ".png");
+            try {
+                imgFile.createNewFile();
+                ImageIO.write(SwingFXUtils.fromFXImage(images[i], null), "png", imgFile);
+                System.out.println("画像ファイルをコピー");
+            } catch (IOException e) {
+                System.err.println(e);
+            }
+        }
+    }
 
     //指定されたディレクトリをコピー
     private void copyDir(String dirIn, String dirOut) {

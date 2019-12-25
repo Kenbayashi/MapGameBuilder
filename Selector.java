@@ -1,5 +1,3 @@
-import javafx.scene.image.*;
-
 public class Selector {
 
     private SelectorDelegate delegate = null;
@@ -7,7 +5,7 @@ public class Selector {
     public int currentNum = 0;
     public String dir;
 
-    public Image[] images;
+    public AnimationItem[] items;
 
     Selector(String dir) {
         this.dir = dir;
@@ -18,30 +16,34 @@ public class Selector {
         this.delegate.setData(this);
     }
 
-    //現在の画像
-    public Image currentImage() {
-        return images[currentNum];
+    //現在のアイテム
+    public AnimationItem currentItem() {
+        return items[currentNum];
     }
 
-    //次の画像
-    public Image nextImage() {
-        if (currentNum == images.length - 1) {
+    //次のアイテム
+    public void nextItem() {
+        items[currentNum].stop();
+
+        if (currentNum == items.length - 1) {
             currentNum = 0;
         } else {
             currentNum++;
         }
 
-        return images[currentNum];
+        items[currentNum].start();
     }
 
-    //前の画像
-    public Image prevImage() {
+    //前のアイテム
+    public void prevItem() {
+        items[currentNum].stop();
+
         if (currentNum == 0) {
-            currentNum = images.length - 1;
+            currentNum = items.length - 1;
         } else {
             currentNum--;
         }
 
-        return images[currentNum];
+        items[currentNum].start();
     }
 }
