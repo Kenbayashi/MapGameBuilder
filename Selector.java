@@ -3,21 +3,19 @@ public class Selector {
     private SelectorDelegate delegate = null;
 
     public int currentNum = 0;
-    public String dir;
-
     public AnimationItem[] items;
 
-    Selector(String dir) {
-        this.dir = dir;
+    public Selector() {
     }
 
     public void setDelegate(SelectorDelegate delegate) {
         this.delegate = delegate;
         this.delegate.setData(this);
+        items[0].start();
     }
 
     //現在のアイテム
-    public AnimationItem currentItem() {
+    public AnimationItem getItem() {
         return items[currentNum];
     }
 
